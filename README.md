@@ -36,7 +36,17 @@ It supports patch preparation from whole-slide images, dataset splitting, and mu
   Variant config tuned for **random-seed experiments**.  
   Similar to `config.json` but allows randomized seeds and validation confidence for multiple runs.
 
----
+- **`val_visualize.py`**  
+  1. Iterates through each experiment folder and a range of confidence thresholds (0.10 → 0.60), runs YOLO().val(...) for every generation, and saves each run’s confusion matrix (CSV + PNG) into a structured results directory.
+  2. For every confidence folder and run, computes derived metrics from the saved confusion matrices (accuracy, background rates, per-class rates), picks the best generation per run by your thresholds/sort order, then aggregates and ranks all “best” models.
+  3. Loads the trend.csv for a specific seed/config at a given validation confidence, plots all tracked metrics across generations, and saves a trend_plot.png showing how performance evolves over time.
+
+- **`modified_raw_data.py`**  
+  This script reads each 7-class boundary CSV file, merges related cell types to create simplified 5-class and 2-class versions, and saves them into corresponding output folders.
+
+- **`merge_new_gt_data.py`**  
+  1. full_merge_process() – Merges all new label files into the existing YOLO dataset, handling incorrect cases separately with corrected class labels.
+  2. count_labels_all_folder() – Counts lesion and normal labels across multiple dataset folders and writes a summary report to a text file.
 
 ## ⚙️ Installation
 
