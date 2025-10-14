@@ -1,6 +1,20 @@
 from pathlib import Path
 import sys
 
+
+added_gt_data_folder = '/project/aip-xli135/jeff418/YOLO/lesion_false_positives_sept_11'
+
+#replicate the previous data folder, change the name and put its path below
+#and since the following folder have the exactly content as the original folder, we only need to apped new data to the following folder
+old_gt_data_folder = Path('/project/aip-xli135/jeff418/YOLO/yolo_data_downscale_2_class_sept_11/labels')
+
+
+lesion_filter_folder = '/project/aip-xli135/jeff418/YOLO/yolo_data_downscale_2_class_sept_9_only_lesion'
+
+
+ #===================================== Merge new datas with existing data files =====================================#
+ #modified the incorrect case list at the end of the files
+
 def check_file_existent(folder_path, file_list):
     checked_folder = Path(folder_path)
     not_exist = []
@@ -103,55 +117,7 @@ def full_merge_process():
     for l in incorrect_case:
         merge_incorrect_data(added_gt_data_folder, old_gt_data_folder, l)
 
-
-#=====================================
-
-def class_filter(file_path):
-    kept_lines = []
-    with open(file_path, "r") as f:
-        for line in f:
-            parts = line.strip().split()
-            if parts[0] == "0" and len(parts) >= 5:
-            #if len(parts) >= 5:
-                kept_lines.append(" ".join(parts[:5]))
-    return kept_lines
-
-def update_file(file_path, kept_lines):
-    with open(file_path, "w") as f:
-        f.write("\n".join(kept_lines))
-
-def delete_data_instance(images_folder, file_path):
-    image_name = file_path.stem
-    image_path = images_folder / f'{image_name}.jpg'
-    file_path.unlink()
-    image_path.unlink()
-
-def lesion_filter_process():
-    target_data_folder = Path(lesion_filter_folder)
-    images_train_folder = target_data_folder / 'images' / 'train'
-    images_val_folder = target_data_folder / 'images' / 'val'
-    labels_train_folder = target_data_folder / 'labels' / 'train'
-    labels_val_folder = target_data_folder / 'labels' / 'val'
-
-    for f in labels_train_folder.iterdir():
-        file_name = f.name
-        file_path = labels_train_folder / file_name
-        kept_lines = class_filter(file_path)
-        if kept_lines:
-            update_file(file_path, kept_lines)
-        else:
-            delete_data_instance(images_train_folder, file_path)
-    
-    for f in labels_val_folder.iterdir():
-        file_name = f.name
-        file_path = labels_val_folder / file_name
-        kept_lines = class_filter(file_path)
-        if kept_lines:
-            update_file(file_path, kept_lines)
-        else:
-            delete_data_instance(images_val_folder, file_path)
-
- #===================================== count labels ===================================== 
+ #===================================== count labels =====================================#
 target_folders_to_count = [
     "/project/aip-xli135/jeff418/YOLO/yolo_data_downscale_2_class",
     "/project/aip-xli135/jeff418/YOLO/yolo_data_downscale_2_class_sept_8",
@@ -207,21 +173,11 @@ def count_labels_all_folder():
         count_labels(Path(target_folder))
 
 
+ #===================================== Main =====================================#
 def main():
-    #full_merge_process()
-    #lesion_filter_process()
-    count_labels_all_folder()
-
-
-
-added_gt_data_folder = '/project/aip-xli135/jeff418/YOLO/lesion_false_positives_sept_11'
-
-#replicate the previous data folder, change the name and put its path below
-#and since the following folder have the exactly content as the original folder, we only need to apped new data to the following folder
-old_gt_data_folder = Path('/project/aip-xli135/jeff418/YOLO/yolo_data_downscale_2_class_sept_11/labels')
-
-
-lesion_filter_folder = '/project/aip-xli135/jeff418/YOLO/yolo_data_downscale_2_class_sept_9_only_lesion'
+    #comment function out as needed
+    full_merge_process()
+    count_labels_all_folder() # gives a report of the numbers of labels base on folders in the target_folders_to_count list
 
 
 incorrect_case = [
