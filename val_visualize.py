@@ -5,8 +5,10 @@ import pandas as pd
 import csv
 import matplotlib.pyplot as plt
 import math
-
 import json
+
+
+ #===================================== different val_conf generation  =====================================#
 with open("/project/aip-xli135/jeff418/YOLO/val_visualize_config.jsonl", "r") as f:
     cfg = json.load(f)
 
@@ -53,6 +55,9 @@ def run_all_vals():
             for conf in confs:
                 print(f"[run] {folder.name} @ conf={conf:.2f}")
                 run_val(folder, conf)
+
+
+#===================================== calculate different values base on confustion matrix  =====================================#
 
 
 def cal_confusion_matrix(folder):
@@ -238,6 +243,8 @@ def cal_confusion_matrix_full_process():
     #rank them from top to lowest, protirize tl_fl
 
 
+#===================================== graphing the trend of selected model and val_conf =====================================#
+
 def graph_model_performance_trend(seed: int, val_conf: float):
     numerical_result_folder = val_result_dir / "numerical_result"
     target_file = numerical_result_folder / f"conf_{val_conf}" / f"seed{seed}_vc0.30" / "trend.csv"
@@ -276,11 +283,14 @@ folder_to_check = [
 runs_folder_dir = Path('/project/aip-xli135/jeff418/YOLO/runs/random_gen_runs')
 val_result_dir = Path('/project/aip-xli135/jeff418/YOLO/val_folder_random_gen')
 
+
+#===================================== Main =====================================#
+
 def main():
     run_all_vals(folder_to_check)
 
 if __name__ == "__main__":
-    #run_all_vals()
-    #cal_confusion_matrix_full_process()
+    run_all_vals()
+    cal_confusion_matrix_full_process()
     graph_model_performance_trend(1390368751, 0.15)
     

@@ -1,3 +1,5 @@
+# type: ignore - this is for pylance
+
 import os, shutil, json, random, openslide, matplotlib
 from ultralytics import YOLO
 import pandas as pd
