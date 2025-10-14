@@ -1,0 +1,64 @@
+{
+  "base_dir": "/project/aip-xli135/jeff418/YOLO",
+  "init_weights": "yolo12m.pt",
+  "runs_dir": "runs/pseudo_cycle_sept_18_2",
+  "pseudo_dir": "pseudo_dataset_sept_18_2",
+
+  "num_classes": 2,
+  "class_names": ["Lesion", "NILM"],
+
+  "generations": 20,
+
+  "conf_start": 0.96,
+  "conf_min": 0.90,
+  "conf_decay": 0.01,
+
+  "mode": "cumulative",
+
+  "iou_keep": 0.70,        
+  "nms_pseudo_iou": 0.45,  
+
+  "pseudo_keep": ["Lesion", "NILM"],
+  "per_class_conf": { "Lesion": 0.90, "NILM": 0.90 },  
+  "per_class_topk": { "Lesion": 5, "NILM": 3 },       
+
+  "train_args": {
+    "epochs": 400,
+    "imgsz": 256,
+    "batch": -1,
+    "device": 0,
+    "workers": 4,
+    "patience": 40,
+    "cos_lr": true,
+    "lr0": 0.001,
+    "lrf": 0.02,
+    "rect": true,
+
+    "degrees": 0.0,
+    "shear": 0.0,
+    "perspective": 0.0,
+    "translate": 0.0,
+    "scale": 0.10,
+    "fliplr": 0.5,
+    "flipud": 0.0,
+    "hsv_h": 0.0,
+    "hsv_s": 0.2,
+    "hsv_v": 0.2,
+    "mosaic": 0.0,
+    "mixup": 0.0,
+    "close_mosaic": 0,
+
+    "label_smoothing": 0.10,
+    "freeze": 10,
+
+    "box": 8.0,   
+    "cls": 0.3,   
+    "dfl": 1.2,   
+    "iou": 0.7    
+  },
+
+  "val_args": {  
+    "iou": 0.60,   
+    "max_det": 500 
+  }
+}
